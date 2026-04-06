@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Bell, Globe, Moon, ChevronRight, Check } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Bell, Globe, Moon, ChevronRight, Check, Crown, ChevronDown } from 'lucide-react'
 import BottomNav from './BottomNav'
+import AccountButton from './AccountButton'
+import SubscriptionCard from './SubscriptionCard'
 
 const LANGUAGES = [
   { code: 'ru', label: 'Русский' },
@@ -34,6 +36,7 @@ export default function Settings() {
     return localStorage.getItem('settings_language') ?? 'ru'
   })
   const [showLangPicker, setShowLangPicker] = useState(false)
+  const [showSubscription, setShowSubscription] = useState(false)
 
   useEffect(() => {
     localStorage.setItem('settings_notifications', JSON.stringify(notifications))
@@ -53,10 +56,15 @@ export default function Settings() {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="px-6 pt-14 pb-4"
+        className="px-6 pt-10 pb-4"
       >
-        <h1 className="text-2xl font-bold text-gray-900">Настройки</h1>
-        <p className="text-gray-500 text-sm mt-1">Управляйте приложением</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">Настройки</h1>
+            <p className="text-gray-500 text-xs mt-0.5">Управляйте приложением</p>
+          </div>
+          <AccountButton />
+        </div>
       </motion.header>
 
       {/* Settings List */}
@@ -66,6 +74,46 @@ export default function Settings() {
         transition={{ delay: 0.15 }}
         className="px-6 space-y-4"
       >
+        {/* Подписка */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <button
+            onClick={() => setShowSubscription(!showSubscription)}
+            className="w-full bg-gradient-to-r from-lime-300 to-lime-400 rounded-[20px] p-4 shadow-md text-left"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="bg-white/60 p-2 rounded-[12px]">
+                  <Crown size={20} className="text-lime-700" />
+                </div>
+                <div className="text-left">
+                  <p className="font-bold text-gray-900">Подписка</p>
+                  <p className="text-xs text-gray-700">Про · 299 ₽/мес</p>
+                </div>
+              </div>
+              <motion.div animate={{ rotate: showSubscription ? 180 : 0 }}>
+                <ChevronDown size={18} className="text-gray-700" />
+              </motion.div>
+            </div>
+          </button>
+
+          <AnimatePresence>
+            {showSubscription && (
+              <motion.div
+                initial={{ opacity: 0, height: 0, y: -10 }}
+                animate={{ opacity: 1, height: 'auto', y: 0 }}
+                exit={{ opacity: 0, height: 0, y: -10 }}
+                className="mt-3 overflow-hidden"
+              >
+                <SubscriptionCard />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
         {/* Notifications */}
         <div className="bg-white rounded-[20px] p-5 shadow-sm flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -136,7 +184,7 @@ export default function Settings() {
 
         {/* App Info */}
         <div className="bg-white rounded-[20px] p-5 shadow-sm">
-          <p className="text-sm text-gray-400 text-center">Kuper Home v0.1.0</p>
+          <p className="text-sm text-gray-400 text-center">Kuper Home v0.2.0</p>
         </div>
       </motion.div>
 

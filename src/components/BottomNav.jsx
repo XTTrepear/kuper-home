@@ -1,28 +1,14 @@
 import { motion } from 'framer-motion'
-import { List, Calendar, Settings } from 'lucide-react'
+import { Calendar, Home, Settings } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
-
-// SVG иконка лапки
-function PawIcon({ size = 22, className = '' }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d="M12 18c-2.5 0-4.5-1.5-5-3.5C6.5 12.5 7 10 9 9c1-.5 2-.5 3 0s2-.5 3 0c2 1 2.5 3.5 2 5.5-.5 2-2.5 3.5-5 3.5z"/>
-      <circle cx="6" cy="7" r="2"/>
-      <circle cx="18" cy="7" r="2"/>
-      <circle cx="4" cy="11" r="1.5"/>
-      <circle cx="20" cy="11" r="1.5"/>
-    </svg>
-  )
-}
 
 export default function BottomNav({ theme }) {
   const location = useLocation()
 
   const navItems = [
-    { icon: PawIcon, path: '/', label: 'rooms' },
-    { icon: List, path: '/list', label: 'list' },
-    { icon: Calendar, path: '/calendar', label: 'calendar' },
-    { icon: Settings, path: '/settings', label: 'settings' },
+    { icon: Calendar, path: '/calendar', label: 'Календарь' },
+    { icon: Home, path: '/', label: 'Главная' },
+    { icon: Settings, path: '/settings', label: 'Настройки' },
   ]
 
   const activeColor = theme?.navActive || 'bg-lime-400'
@@ -30,7 +16,7 @@ export default function BottomNav({ theme }) {
   const getActiveIndex = () => {
     const hashPath = location.pathname || '/'
     const idx = navItems.findIndex(item => item.path === hashPath)
-    return idx >= 0 ? idx : 0
+    return idx >= 0 ? idx : 1
   }
 
   return (
@@ -39,32 +25,32 @@ export default function BottomNav({ theme }) {
       animate={{ y: 0 }}
       className="absolute bottom-0 left-0 right-0 z-50"
     >
-      <div className="bg-white/95 backdrop-blur-md rounded-t-[20px] shadow-lg border-t border-gray-100 px-8 py-3 mx-2 mb-2">
+      <div className="bg-white/90 backdrop-blur-xl rounded-t-[28px] shadow-[0_-4px_30px_rgba(0,0,0,0.08)] border-t border-white/50 px-4 py-4 mx-1 mb-1">
         <div className="flex items-center justify-around">
           {navItems.map((item, index) => {
             const IconComponent = item.icon
             const isActive = index === getActiveIndex()
 
             return (
-              <Link key={item.label} to={item.path}>
+              <Link key={item.label} to={item.path} className="flex-1 flex justify-center">
                 <motion.div
-                  whileTap={{ scale: 0.9 }}
-                  className={`relative p-2.5 rounded-[16px] ${
-                    isActive ? `${activeColor}` : ''
+                  whileTap={{ scale: 0.92 }}
+                  className={`flex flex-col items-center gap-1 py-2 px-4 rounded-[18px] transition-all ${
+                    isActive
+                      ? `${activeColor} shadow-lg scale-105`
+                      : 'bg-gray-50/80 hover:bg-gray-100/80'
                   }`}
                 >
-                  {item.label === 'rooms' ? (
-                    <IconComponent
-                      size={22}
-                      className={isActive ? 'text-white' : 'text-gray-300'}
-                    />
-                  ) : (
-                    <IconComponent
-                      size={22}
-                      className={isActive ? 'text-white' : 'text-gray-300'}
-                      strokeWidth={isActive ? 2.5 : 2}
-                    />
-                  )}
+                  <IconComponent
+                    size={24}
+                    className={isActive ? 'text-white' : 'text-gray-400'}
+                    strokeWidth={isActive ? 2.5 : 2}
+                  />
+                  <span className={`text-[10px] font-medium ${
+                    isActive ? 'text-white/90' : 'text-gray-400'
+                  }`}>
+                    {item.label}
+                  </span>
                 </motion.div>
               </Link>
             )
