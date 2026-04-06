@@ -294,12 +294,7 @@ export default function Category() {
         </div>
       </motion.div>
 
-      <BottomNav 
-        theme={theme} 
-        activeIndex={[
-          'kitchen', 'bathroom', 'pets', 'medicine'
-        ].indexOf(category.color)} 
-      />
+      <BottomNav theme={theme} />
     </div>
   )
 }

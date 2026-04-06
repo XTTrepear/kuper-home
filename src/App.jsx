@@ -1,6 +1,9 @@
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import Home from './components/Home'
 import Category from './components/Category'
+import List from './components/List'
+import CalendarPage from './components/Calendar'
+import Settings from './components/Settings'
 
 function App() {
   return (
@@ -10,6 +13,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/category/:slug" element={<Category />} />
+            <Route path="/list" element={<List />} />
+            <Route path="/calendar" element={<CalendarPage />} />
+            <Route path="/settings" element={<Settings />} />
           </Routes>
         </div>
       </div>

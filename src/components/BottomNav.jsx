@@ -15,17 +15,23 @@ function PawIcon({ size = 22, className = '' }) {
   )
 }
 
-export default function BottomNav({ theme, activeIndex = 0 }) {
+export default function BottomNav({ theme }) {
   const location = useLocation()
 
   const navItems = [
     { icon: PawIcon, path: '/', label: 'rooms' },
-    { icon: List, path: '/', label: 'list' },
-    { icon: Calendar, path: '/', label: 'calendar' },
-    { icon: Settings, path: '/', label: 'settings' },
+    { icon: List, path: '/list', label: 'list' },
+    { icon: Calendar, path: '/calendar', label: 'calendar' },
+    { icon: Settings, path: '/settings', label: 'settings' },
   ]
 
   const activeColor = theme?.navActive || 'bg-lime-400'
+
+  const getActiveIndex = () => {
+    const hashPath = location.pathname || '/'
+    const idx = navItems.findIndex(item => item.path === hashPath)
+    return idx >= 0 ? idx : 0
+  }
 
   return (
     <motion.nav
@@ -37,7 +43,7 @@ export default function BottomNav({ theme, activeIndex = 0 }) {
         <div className="flex items-center justify-around">
           {navItems.map((item, index) => {
             const IconComponent = item.icon
-            const isActive = index === activeIndex
+            const isActive = index === getActiveIndex()
 
             return (
               <Link key={item.label} to={item.path}>

@@ -101,7 +101,7 @@ export default function Home() {
         </div>
       </motion.div>
 
-      <BottomNav activeIndex={0} />
+      <BottomNav />
     </div>
   )
 }
