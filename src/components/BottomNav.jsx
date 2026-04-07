@@ -23,9 +23,15 @@ export default function BottomNav({ theme }) {
     <motion.nav
       initial={{ y: 100 }}
       animate={{ y: 0 }}
-      className="absolute bottom-0 left-0 right-0 z-50"
+      className="fixed bottom-0 z-50"
+      style={{
+        left: '50%',
+        transform: 'translateX(-50%)',
+        maxWidth: '430px',
+        width: '100%',
+      }}
     >
-      <div className="bg-white/90 backdrop-blur-xl rounded-t-[28px] shadow-[0_-4px_30px_rgba(0,0,0,0.08)] border-t border-white/50 px-4 py-4 mx-1 mb-1">
+      <div className="rounded-t-[28px] shadow-[0_-4px_30px_rgba(0,0,0,0.08)] border-t px-4 py-4 mx-1 mb-1 glass">
         <div className="flex items-center justify-around">
           {navItems.map((item, index) => {
             const IconComponent = item.icon
@@ -38,17 +44,20 @@ export default function BottomNav({ theme }) {
                   className={`flex flex-col items-center gap-1 py-2 px-4 rounded-[18px] transition-all ${
                     isActive
                       ? `${activeColor} shadow-lg scale-105`
-                      : 'bg-gray-50/80 hover:bg-gray-100/80'
+                      : 'hover:bg-gray-100/80 dark:hover:bg-gray-700/50'
                   }`}
+                  style={!isActive ? { background: 'var(--bg-tertiary)' } : {}}
                 >
                   <IconComponent
                     size={24}
-                    className={isActive ? 'text-white' : 'text-gray-400'}
+                    className={isActive ? 'text-white' : ''}
+                    style={!isActive ? { color: 'var(--text-muted)' } : {}}
                     strokeWidth={isActive ? 2.5 : 2}
                   />
-                  <span className={`text-[10px] font-medium ${
-                    isActive ? 'text-white/90' : 'text-gray-400'
-                  }`}>
+                  <span
+                    className="text-[10px] font-medium"
+                    style={isActive ? { color: 'white' } : { color: 'var(--text-muted)' }}
+                  >
                     {item.label}
                   </span>
                 </motion.div>

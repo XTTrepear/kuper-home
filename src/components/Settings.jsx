@@ -14,7 +14,7 @@ function Toggle({ checked, onChange }) {
   return (
     <button
       onClick={() => onChange(!checked)}
-      className={`relative w-12 h-7 rounded-full transition-colors ${checked ? 'bg-lime-400' : 'bg-gray-300'}`}
+      className={`relative w-12 h-7 rounded-full transition-colors ${checked ? 'bg-lime-400' : 'bg-gray-300 dark:bg-gray-600'}`}
     >
       <motion.div
         animate={{ x: checked ? 22 : 2 }}
@@ -44,6 +44,7 @@ export default function Settings() {
 
   useEffect(() => {
     localStorage.setItem('settings_darkmode', JSON.stringify(darkMode))
+    document.documentElement.classList.toggle('dark', darkMode)
   }, [darkMode])
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function Settings() {
   }, [language])
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-28">
+    <div className="min-h-screen pb-28 transition-colors duration-300" style={{ background: 'var(--bg-primary)' }}>
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -60,8 +61,8 @@ export default function Settings() {
       >
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Настройки</h1>
-            <p className="text-gray-500 text-xs mt-0.5">Управляйте приложением</p>
+            <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Настройки</h1>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Управляйте приложением</p>
           </div>
           <AccountButton />
         </div>
@@ -115,66 +116,67 @@ export default function Settings() {
         </motion.div>
 
         {/* Notifications */}
-        <div className="bg-white rounded-[20px] p-5 shadow-sm flex items-center justify-between">
+        <div className="rounded-[20px] p-5 shadow-sm flex items-center justify-between" style={{ background: 'var(--bg-secondary)' }}>
           <div className="flex items-center gap-3">
-            <div className="bg-lime-100 p-2.5 rounded-[14px]">
+            <div className="bg-lime-100 dark:bg-lime-900/30 p-2.5 rounded-[14px]">
               <Bell size={20} className="text-lime-600" />
             </div>
             <div>
-              <p className="font-semibold text-gray-900">Уведомления</p>
-              <p className="text-xs text-gray-400">Push-уведомления</p>
+              <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>Уведомления</p>
+              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Push-уведомления</p>
             </div>
           </div>
           <Toggle checked={notifications} onChange={setNotifications} />
         </div>
 
         {/* Dark Mode */}
-        <div className="bg-white rounded-[20px] p-5 shadow-sm flex items-center justify-between">
+        <div className="rounded-[20px] p-5 shadow-sm flex items-center justify-between" style={{ background: 'var(--bg-secondary)' }}>
           <div className="flex items-center gap-3">
-            <div className="bg-gray-100 p-2.5 rounded-[14px]">
-              <Moon size={20} className="text-gray-600" />
+            <div className="p-2.5 rounded-[14px]" style={{ background: 'var(--bg-tertiary)' }}>
+              <Moon size={20} style={{ color: 'var(--text-secondary)' }} />
             </div>
             <div>
-              <p className="font-semibold text-gray-900">Тёмная тема</p>
-              <p className="text-xs text-gray-400">Тёмный фон</p>
+              <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>Тёмная тема</p>
+              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Тёмный фон</p>
             </div>
           </div>
           <Toggle checked={darkMode} onChange={setDarkMode} />
         </div>
 
         {/* Language */}
-        <div className="bg-white rounded-[20px] shadow-sm overflow-hidden">
+        <div className="rounded-[20px] shadow-sm overflow-hidden" style={{ background: 'var(--bg-secondary)' }}>
           <button
             onClick={() => setShowLangPicker(!showLangPicker)}
             className="w-full p-5 flex items-center justify-between"
           >
             <div className="flex items-center gap-3">
-              <div className="bg-blue-100 p-2.5 rounded-[14px]">
+              <div className="bg-blue-100 dark:bg-blue-900/30 p-2.5 rounded-[14px]">
                 <Globe size={20} className="text-blue-600" />
               </div>
               <div className="text-left">
-                <p className="font-semibold text-gray-900">Язык</p>
-                <p className="text-xs text-gray-400">
+                <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>Язык</p>
+                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
                   {LANGUAGES.find(l => l.code === language)?.label}
                 </p>
               </div>
             </div>
-            <ChevronRight size={18} className="text-gray-400" />
+            <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
           </button>
 
           {showLangPicker && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
-              className="border-t border-gray-100"
+              className="border-t"
+              style={{ borderColor: 'var(--border-color)' }}
             >
               {LANGUAGES.map(lang => (
                 <button
                   key={lang.code}
                   onClick={() => { setLanguage(lang.code); setShowLangPicker(false) }}
-                  className="w-full px-5 py-3.5 flex items-center justify-between hover:bg-gray-50"
+                  className="w-full px-5 py-3.5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
-                  <span className="text-sm text-gray-700">{lang.label}</span>
+                  <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{lang.label}</span>
                   {language === lang.code && <Check size={16} className="text-lime-500" />}
                 </button>
               ))}
@@ -183,8 +185,8 @@ export default function Settings() {
         </div>
 
         {/* App Info */}
-        <div className="bg-white rounded-[20px] p-5 shadow-sm">
-          <p className="text-sm text-gray-400 text-center">Kuper Home v0.2.0</p>
+        <div className="rounded-[20px] p-5 shadow-sm" style={{ background: 'var(--bg-secondary)' }}>
+          <p className="text-sm text-center" style={{ color: 'var(--text-muted)' }}>Kuper Home v0.3.0</p>
         </div>
       </motion.div>
 

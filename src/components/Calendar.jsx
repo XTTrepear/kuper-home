@@ -6,10 +6,10 @@ import BottomNav from './BottomNav'
 import AccountButton from './AccountButton'
 
 const categoryColors = {
-  'Кухня': { bg: 'bg-lime-100', text: 'text-lime-700', dot: 'bg-lime-400' },
-  'Ванная': { bg: 'bg-blue-100', text: 'text-blue-700', dot: 'bg-blue-400' },
-  'Питомцы': { bg: 'bg-yellow-100', text: 'text-yellow-700', dot: 'bg-yellow-400' },
-  'Аптечка': { bg: 'bg-green-100', text: 'text-green-700', dot: 'bg-green-400' },
+  'Кухня': { bg: 'bg-lime-100 dark:bg-lime-900/30', text: 'text-lime-700 dark:text-lime-400', dot: 'bg-lime-400' },
+  'Ванная': { bg: 'bg-blue-100 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-400', dot: 'bg-blue-400' },
+  'Питомцы': { bg: 'bg-yellow-100 dark:bg-yellow-900/30', text: 'text-yellow-700 dark:text-yellow-400', dot: 'bg-yellow-400' },
+  'Аптечка': { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-400', dot: 'bg-green-400' },
 }
 
 const monthNames = [
@@ -18,13 +18,12 @@ const monthNames = [
 ]
 
 export default function CalendarPage() {
-  const [currentMonth, setCurrentMonth] = useState(3) // Апрель (0-based = 3)
+  const [currentMonth, setCurrentMonth] = useState(3)
   const [currentYear] = useState(2026)
   const [selectedDay, setSelectedDay] = useState(null)
 
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
   const firstDayOfWeek = new Date(currentYear, currentMonth, 1).getDay()
-  // Пн=0, Вс=6
   const startOffset = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1
 
   const prevMonth = () => setCurrentMonth(m => (m > 0 ? m - 1 : 11))
@@ -36,15 +35,11 @@ export default function CalendarPage() {
   })
 
   const deliveryDays = deliveriesForMonth.map(d => d.day)
-
-  const getDeliveriesForDay = (day) => {
-    return deliveriesForMonth.find(d => d.day === day)
-  }
-
+  const getDeliveriesForDay = (day) => deliveriesForMonth.find(d => d.day === day)
   const selectedDeliveries = selectedDay ? getDeliveriesForDay(selectedDay) : null
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-28">
+    <div className="min-h-screen pb-28 transition-colors duration-300" style={{ background: 'var(--bg-primary)' }}>
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -53,8 +48,8 @@ export default function CalendarPage() {
       >
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Календарь доставок</h1>
-            <p className="text-gray-500 text-xs mt-0.5">Расписание привозов</p>
+            <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Календарь доставок</h1>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Расписание привозов</p>
           </div>
           <AccountButton />
         </div>
@@ -67,23 +62,23 @@ export default function CalendarPage() {
         transition={{ delay: 0.1 }}
         className="px-5 mb-3"
       >
-        <div className="bg-white rounded-[20px] p-4 shadow-sm">
+        <div className="rounded-[20px] p-4 shadow-sm" style={{ background: 'var(--bg-secondary)' }}>
           <div className="flex items-center justify-between mb-4">
-            <motion.button whileTap={{ scale: 0.9 }} onClick={prevMonth} className="w-9 h-9 bg-gray-100 rounded-xl flex items-center justify-center">
-              <ChevronLeft size={18} className="text-gray-600" />
+            <motion.button whileTap={{ scale: 0.9 }} onClick={prevMonth} className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'var(--bg-tertiary)' }}>
+              <ChevronLeft size={18} style={{ color: 'var(--text-secondary)' }} />
             </motion.button>
-            <h2 className="font-bold text-gray-900 text-base">
+            <h2 className="font-bold text-base" style={{ color: 'var(--text-primary)' }}>
               {monthNames[currentMonth]} {currentYear}
             </h2>
-            <motion.button whileTap={{ scale: 0.9 }} onClick={nextMonth} className="w-9 h-9 bg-gray-100 rounded-xl flex items-center justify-center">
-              <ChevronRight size={18} className="text-gray-600" />
+            <motion.button whileTap={{ scale: 0.9 }} onClick={nextMonth} className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'var(--bg-tertiary)' }}>
+              <ChevronRight size={18} style={{ color: 'var(--text-secondary)' }} />
             </motion.button>
           </div>
 
           {/* Дни недели */}
           <div className="grid grid-cols-7 mb-2">
             {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(d => (
-              <div key={d} className="text-center text-[10px] font-medium text-gray-400 py-1">
+              <div key={d} className="text-center text-[10px] font-medium py-1" style={{ color: 'var(--text-muted)' }}>
                 {d}
               </div>
             ))}
@@ -110,9 +105,10 @@ export default function CalendarPage() {
                     isSelected
                       ? 'bg-lime-400 text-white shadow-md'
                       : hasDelivery
-                      ? 'bg-lime-50 text-gray-800'
-                      : 'text-gray-500 hover:bg-gray-50'
+                      ? 'bg-lime-50 dark:bg-lime-900/20'
+                      : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'
                   }`}
+                  style={!isSelected && !hasDelivery ? { color: 'var(--text-muted)' } : isSelected ? { color: 'white' } : {}}
                 >
                   <span>{day}</span>
                   {hasDelivery && (
@@ -141,11 +137,11 @@ export default function CalendarPage() {
         transition={{ delay: 0.2 }}
         className="px-5 mb-3"
       >
-        <div className="bg-white rounded-[16px] p-3 shadow-sm flex flex-wrap gap-3">
+        <div className="rounded-[16px] p-3 shadow-sm flex flex-wrap gap-3" style={{ background: 'var(--bg-secondary)' }}>
           {Object.entries(categoryColors).map(([name, colors]) => (
             <div key={name} className="flex items-center gap-1.5">
               <span className={`w-2.5 h-2.5 rounded-full ${colors.dot}`} />
-              <span className="text-[10px] text-gray-500">{name}</span>
+              <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>{name}</span>
             </div>
           ))}
         </div>
@@ -160,13 +156,13 @@ export default function CalendarPage() {
             exit={{ opacity: 0, y: 20, height: 0 }}
             className="px-5 mb-3 overflow-hidden"
           >
-            <div className="bg-white rounded-[20px] p-4 shadow-sm">
+            <div className="rounded-[20px] p-4 shadow-sm" style={{ background: 'var(--bg-secondary)' }}>
               <div className="flex items-center gap-2 mb-3">
                 <Truck size={18} className="text-lime-500" />
-                <h3 className="font-bold text-gray-900">
+                <h3 className="font-bold" style={{ color: 'var(--text-primary)' }}>
                   {selectedDeliveries.day} {monthNames[currentMonth]}
                 </h3>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
                   · {selectedDeliveries.items.length} поз.
                 </span>
               </div>
@@ -180,16 +176,16 @@ export default function CalendarPage() {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.06 }}
-                      className={`flex items-center gap-3 ${catStyle?.bg || 'bg-gray-50'} rounded-[14px] p-3`}
+                      className={`flex items-center gap-3 ${catStyle?.bg || ''} rounded-[14px] p-3`}
                     >
                       <span className="text-xl">{item.icon}</span>
                       <div className="flex-1 min-w-0">
-                        <p className={`font-semibold text-sm ${catStyle?.text || 'text-gray-700'}`}>
+                        <p className={`font-semibold text-sm ${catStyle?.text || ''}`}>
                           {item.name}
                         </p>
-                        <p className="text-[10px] text-gray-500">{item.category} · {item.profile}</p>
+                        <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>{item.category} · {item.profile}</p>
                       </div>
-                      <Package size={14} className="text-gray-400 flex-shrink-0" />
+                      <Package size={14} style={{ color: 'var(--text-muted)' }} />
                     </motion.div>
                   )
                 })}
@@ -206,7 +202,7 @@ export default function CalendarPage() {
         transition={{ delay: 0.3 }}
         className="px-5"
       >
-        <h3 className="font-semibold text-gray-700 text-sm mb-2 flex items-center gap-1.5">
+        <h3 className="font-semibold text-sm mb-2 flex items-center gap-1.5" style={{ color: 'var(--text-secondary)' }}>
           <Truck size={14} className="text-lime-500" />
           Все доставки месяца
         </h3>
@@ -218,18 +214,19 @@ export default function CalendarPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.35 + index * 0.06 }}
               onClick={() => setSelectedDay(selectedDay === delivery.day ? null : delivery.day)}
-              className={`bg-white rounded-[16px] p-3.5 shadow-sm cursor-pointer ${
+              className={`rounded-[16px] p-3.5 shadow-sm cursor-pointer transition-all ${
                 selectedDay === delivery.day ? 'ring-2 ring-lime-400' : ''
               }`}
+              style={{ background: 'var(--bg-secondary)' }}
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Truck size={16} className="text-lime-500" />
-                  <span className="font-semibold text-gray-900 text-sm">
+                  <span className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>
                     {delivery.day} {monthNames[currentMonth]}
                   </span>
                 </div>
-                <span className="text-xs text-gray-400">{delivery.items.length} товаров</span>
+                <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{delivery.items.length} товаров</span>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {delivery.items.map((item, i) => {
@@ -238,8 +235,8 @@ export default function CalendarPage() {
                     <span
                       key={i}
                       className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-medium ${
-                        catStyle?.bg || 'bg-gray-50'
-                      } ${catStyle?.text || 'text-gray-600'}`}
+                        catStyle?.bg || ''
+                      } ${catStyle?.text || ''}`}
                     >
                       {item.icon} {item.name}
                     </span>
