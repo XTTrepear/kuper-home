@@ -20,19 +20,13 @@ export default function BottomNav({ theme }) {
   }
 
   return (
-    <motion.nav
-      initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      className="fixed bottom-0 z-50"
-      style={{
-        left: '50%',
-        transform: 'translateX(-50%)',
-        maxWidth: '430px',
-        width: '100%',
-      }}
-    >
-      <div className="rounded-t-[28px] shadow-[0_-4px_30px_rgba(0,0,0,0.08)] border-t px-4 py-4 mx-1 mb-1 glass">
-        <div className="flex items-center justify-around">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 flex justify-center">
+      <motion.div
+        initial={{ y: 100 }}
+        animate={{ y: 0 }}
+        className="w-full max-w-[430px] rounded-t-[28px] shadow-[0_-4px_30px_rgba(0,0,0,0.08)] border-t px-2 py-3 mx-auto mb-1 glass"
+      >
+        <div className="flex items-center justify-center gap-2">
           {navItems.map((item, index) => {
             const IconComponent = item.icon
             const isActive = index === getActiveIndex()
@@ -65,7 +59,7 @@ export default function BottomNav({ theme }) {
             )
           })}
         </div>
-      </div>
-    </motion.nav>
+      </motion.div>
+    </nav>
   )
 }
