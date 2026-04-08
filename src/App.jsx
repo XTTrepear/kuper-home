@@ -4,6 +4,7 @@ import Home from './components/Home'
 import Category from './components/Category'
 import CalendarPage from './components/Calendar'
 import Settings from './components/Settings'
+import Assistant from './components/Assistant'
 
 function App() {
   useEffect(() => {
@@ -38,6 +39,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/category/:slug" element={<Category />} />
+            <Route path="/assistant" element={<Assistant />} />
             <Route path="/calendar" element={<CalendarPage />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>

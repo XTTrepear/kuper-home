@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import {
   ArrowLeft, ShoppingCart, CreditCard, Calendar as CalendarIcon,
-  CheckCircle, AlertCircle, XCircle, Sparkles
+  CheckCircle, AlertCircle, XCircle, Sparkles, SlidersHorizontal
 } from 'lucide-react'
 import { categories, profiles, deliverySchedule } from '../data/products'
+import { kuperCatalog, analogGroups } from '../data/kuperCatalog'
+import { scoreProducts, getRecommendationReason } from '../utils/comparisonEngine'
+import ComparisonModal from './ComparisonModal'
 import BottomNav from './BottomNav'
 import AccountButton from './AccountButton'
 
@@ -263,6 +266,21 @@ export default function Category() {
   const [autoOrder, setAutoOrder] = useState(false)
   const [autoPay, setAutoPay] = useState(false)
   const [showCategoryCalendar, setShowCategoryCalendar] = useState(false)
+  const [comparisonProducts, setComparisonProducts] = useState(null)
+  const [showComparison, setShowComparison] = useState(false)
+
+  const openComparison = (analogGroupKey) => {
+    const group = analogGroups[analogGroupKey]
+    if (group) {
+      setComparisonProducts(group)
+      setShowComparison(true)
+    }
+  }
+
+  const closeComparison = () => {
+    setShowComparison(false)
+    setComparisonProducts(null)
+  }
 
   if (!category) {
     return (
@@ -402,10 +420,16 @@ export default function Category() {
         transition={{ delay: 0.45 }}
         className="px-5 mb-3"
       >
-        <h3 className="font-semibold text-sm mb-2 flex items-center gap-1.5" style={{ color: 'var(--text-secondary)' }}>
-          <ShoppingCart size={14} className={theme.accentText} />
-          Все продукты
-        </h3>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="font-semibold text-sm flex items-center gap-1.5" style={{ color: 'var(--text-secondary)' }}>
+            <ShoppingCart size={14} className={theme.accentText} />
+            Все продукты
+          </h3>
+          <Link to="/assistant" className="flex items-center gap-1 text-xs text-lime-600 dark:text-lime-400 font-medium">
+            <SlidersHorizontal size={12} />
+            Ассистент
+          </Link>
+        </div>
         <div className="space-y-2">
           {profileProducts.map((product, index) => {
             const config = statusConfig[product.status]
@@ -613,6 +637,16 @@ export default function Category() {
       </motion.div>
 
       <BottomNav theme={theme} />
+
+      {/* Comparison Modal */}
+      <AnimatePresence>
+        {showComparison && comparisonProducts && (
+          <ComparisonModal
+            products={comparisonProducts}
+            onClose={closeComparison}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }

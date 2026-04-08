@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Calendar, Home, Settings } from 'lucide-react'
+import { Calendar, Home, Settings, Sparkles } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 
 export default function BottomNav({ theme }) {
@@ -8,6 +8,7 @@ export default function BottomNav({ theme }) {
   const navItems = [
     { icon: Calendar, path: '/calendar', label: 'Календарь' },
     { icon: Home, path: '/', label: 'Главная' },
+    { icon: Sparkles, path: '/assistant', label: 'Ассистент' },
     { icon: Settings, path: '/settings', label: 'Настройки' },
   ]
 
@@ -26,7 +27,7 @@ export default function BottomNav({ theme }) {
         animate={{ y: 0 }}
         className="w-full max-w-[430px] rounded-t-[28px] shadow-[0_-4px_30px_rgba(0,0,0,0.08)] border-t px-2 py-3 mx-auto mb-1 glass"
       >
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center justify-around gap-2">
           {navItems.map((item, index) => {
             const IconComponent = item.icon
             const isActive = index === getActiveIndex()

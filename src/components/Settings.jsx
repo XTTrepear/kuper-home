@@ -186,7 +186,7 @@ export default function Settings() {
 
         {/* App Info */}
         <div className="rounded-[20px] p-5 shadow-sm" style={{ background: 'var(--bg-secondary)' }}>
-          <p className="text-sm text-center" style={{ color: 'var(--text-muted)' }}>Kuper Home v0.3.0</p>
+          <p className="text-sm text-center" style={{ color: 'var(--text-muted)' }}>Купер Ассистент v0.4.0</p>
         </div>
       </motion.div>
 

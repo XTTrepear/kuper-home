@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Bell, Sparkles, Clock, TrendingUp, X } from 'lucide-react'
+import { Bell, Sparkles, Clock, TrendingUp, X, Star, Zap } from 'lucide-react'
 import { categories, smartSets, recommendedProducts, demoNotifications, profiles } from '../data/products'
+import { getTopRecommendations, scoreProducts } from '../utils/comparisonEngine'
 import BottomNav from './BottomNav'
 import AccountButton from './AccountButton'
 
@@ -142,6 +143,9 @@ export default function Home() {
   const [showNotifications, setShowNotifications] = useState(false)
   const [selectedSet, setSelectedSet] = useState(null)
 
+  // Получаем рекомендации ассистента
+  const assistantRecs = getTopRecommendations(3)
+
   return (
     <div className="min-h-screen pb-28 relative overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
       {/* Sparkle particles */}
@@ -177,7 +181,7 @@ export default function Home() {
               className="text-sm mt-0.5"
               style={{ color: 'var(--text-secondary)' }}
             >
-              в ваш виртуальный дом 🏠
+              в ваш Купер Ассистент 🤖
             </motion.p>
           </div>
           <div className="flex items-center gap-2">
@@ -278,7 +282,7 @@ export default function Home() {
       >
         <h2 className="text-sm font-semibold mb-3 flex items-center gap-1.5" style={{ color: 'var(--text-secondary)' }}>
           <TrendingUp size={14} className="text-blue-500" />
-          Рекомендовано для вас
+          Вам может понравиться
         </h2>
         <div className="space-y-2.5">
           {recommendedProducts.map((product, index) => {
@@ -311,6 +315,68 @@ export default function Home() {
               </motion.div>
             )
           })}
+        </div>
+      </motion.div>
+
+      {/* Ассистент нашёл выгодное */}
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="px-6 mb-6 relative z-10"
+      >
+        <Link to="/assistant">
+          <h2 className="text-sm font-semibold mb-3 flex items-center gap-1.5 cursor-pointer" style={{ color: 'var(--text-secondary)' }}>
+            <Sparkles size={14} className="text-lime-500" />
+            Ассистент нашёл выгодное
+            <span className="text-[10px] text-lime-600 dark:text-lime-400 ml-auto">Смотреть все →</span>
+          </h2>
+        </Link>
+        <div className="space-y-2.5">
+          {assistantRecs.map((product, index) => (
+            <Link key={product.id} to="/assistant">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.65 + index * 0.08 }}
+                whileHover={{ scale: 1.01, y: -1 }}
+                whileTap={{ scale: 0.99 }}
+                className="rounded-[16px] p-3.5 flex items-center gap-3 shadow-sm cursor-pointer ring-1 ring-lime-200 dark:ring-lime-800"
+                style={{ background: 'var(--bg-secondary)' }}
+              >
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-sm icon-3d" style={{ background: 'var(--bg-tertiary)' }}>
+                    {product.image}
+                  </div>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{product.name}</h4>
+                  <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-muted)' }}>
+                    <div className="flex items-center gap-0.5">
+                      <Star size={10} className="text-yellow-500 fill-yellow-500" />
+                      <span>{product.rating}</span>
+                    </div>
+                    <span>· {product.reviewsCount.toLocaleString('ru')} отзывов</span>
+                  </div>
+                </div>
+                <div className="text-right flex-shrink-0">
+                  {product.salePrice ? (
+                    <div>
+                      <p className="text-[10px] line-through" style={{ color: 'var(--text-muted)' }}>{product.price} ₽</p>
+                      <p className="font-bold text-sm text-lime-600">{product.finalPrice} ₽</p>
+                    </div>
+                  ) : (
+                    <p className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>{product.finalPrice} ₽</p>
+                  )}
+                  {product.badges.includes('sale') && (
+                    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400 mt-0.5">
+                      <Zap size={8} /> Скидка
+                    </span>
+                  )}
+                </div>
+              </motion.div>
+            </Link>
+          ))}
         </div>
       </motion.div>
 
